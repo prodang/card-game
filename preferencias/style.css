@@ -1,0 +1,21 @@
+nav{
+    padding: 0rem 1.5rem;
+    background: orange;
+}
+
+section{
+    margin-top: 20rem;
+}
+
+section article{
+    padding: 5rem;
+    background:wheat;
+}
+
+fieldset{
+    background:wheat;
+}
+
+fieldset .select{
+    padding: 30px;
+}
