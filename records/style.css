@@ -4,14 +4,14 @@ nav{
 }
 
 section{
-    margin-top: 20px;
+    margin-top: 5rem;
 }
 
 article{
     margin:auto;
     padding: 20px 0;
     display:block; 
-    width:90%; 
+    width: 1000px;
     border-radius: 10px;
     border: 1.5px solid blue;
     box-shadow: 1px 1px 5px black;
