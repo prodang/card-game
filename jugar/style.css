@@ -4,7 +4,7 @@ nav{
 }
 
 main{
-    margin: 10rem auto;
+    margin: 5rem auto;
     width: 1500px;
 }
 
@@ -35,7 +35,7 @@ img{
 }
 
 .content{
-    background:palegoldenrod;
+    background:wheat;
     border: 2px solid blue;
     padding: 10px 0;
 }
