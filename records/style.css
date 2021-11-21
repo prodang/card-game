@@ -1,0 +1,31 @@
+nav{
+    padding: 0rem 1.5rem;
+    background: orange;
+}
+
+section{
+    margin-top: 5rem;
+}
+
+article{
+    margin:auto;
+    padding: 20px 0;
+    display:block; 
+    width: 1000px;
+    border-radius: 10px;
+    border: 1.5px solid blue;
+    box-shadow: 1px 1px 5px black;
+    background:wheat;
+}
+
+.table{
+    width:50%; 
+    margin: auto;
+    padding: 20px 0;
+    border: 2px solid;
+    border-bottom-color: blue;
+    border-right-color: blue;
+    border-top-color: orange; 
+    border-left-color: orange;
+    text-align: center;
+}
