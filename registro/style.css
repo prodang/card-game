@@ -28,12 +28,10 @@ article{
     border-left-color: orange;
 }
 
-
-.select{
-    padding: 30px;
+input{
+    margin: 20px 0;
 }
 
 button{
-    border-radius: 5px;
-    margin: 10px 0;
+    margin-top: 20px;
 }
