@@ -1,66 +1,89 @@
-var num, cards, card1, card2, cont;
-const NUM_CARTAS = 2;
+//import Card  from "./Card.js";
+
+var num, cards, card1, card2, entry, time, punt, win;
 
 $(function (){
-    num = 20;// getNumberCards();
-    cards = new Array(20);
-    cont = 0;
+    buildDates();
+    cards = new Array(num);
+    entry = 0;
+    win = 0;
+    punt = 0;
     initCards();
     initBoard();
+    $('#puntuation').val(punt);
+    $('#total').val(punt);
     $('img').click(function(){
         let i = getCard($(this).prop('id'));
         if(cards[i].getType() == 0){
-            console.log('ENTRO');
-            cont++;
+            entry++;
             if(card1 == ""){
                 card1 = $(this).prop('id');
-                //console.log('Entro1: '+card1);
             }else{
                 card2 = $(this).prop('id');
-                //console.log('Entro2: '+card2);
             }
 
             if(card1 == card2){
-                //console.log(card1);
                 $('#'+card1).prop('src','../img/reverso.jpg');
-                cont = 0;
+                entry = 0;
                 initCards();
             }else{
-                if(cards[i].getState() == 1){
-                    $(this).attr('src','../img/copas12.jpg');
-                }else{
-                    $(this).attr('src','../img/bastos1.jpg');
-                }
+                $(this).attr('src',cards[i].getState());
             }
             
-            if(cont == 2){
+            if(entry == 2){
                 if(isDiferent()){
+                    punt -= 5;
+                    $('#puntuation').val(punt);
+
                     setTimeout(resetCards, 700);
                 }else{
+                    win += 2;
+
+                    punt += 15;
+                    $('#puntuation').val(punt);
+
                     let j = getCard(card1);
                     cards[j].change();
                     cards[i].change();
+
+                    if(win == num){
+                        if(num == 26){
+                            punt += 25;
+                        }else if(num == 32){
+                            punt += 50;
+                        }
+
+                        if(time == 60){
+                            punt += 100;
+                        }else if(time == 90){
+                            punt += 75;
+                        }else if(time == 120){
+                            punt += 50;
+                        }else if(time == 150){
+                            punt += 25;
+                        }
+                        $('#total').val(punt);
+                    }
                     initCards();
                 }
-                cont = 0;
+                entry = 0;
             }
-        }
+        }                                             
     });
 });
-
-window.onload = clock;
-var time = 3;
 
 function clock(){
     $('#clock').val(time);
     if(time == 0){
         alert("Finish");
-        for(i=0;i<20;i++){
+        for(i=0;i<num;i++){
             cards[i].setType(1);
         }
     }else{
-        time -= 1;
-        setTimeout(clock, 1000);
+        if(win != num){
+            time -= 1;
+            setTimeout(clock, 1000);
+        }
     }
 }
 
@@ -70,14 +93,23 @@ function initCards(){
     card2 = "";
 }
 
-function getNumberCards(){
-    let cards = localStorage.getItem('images');
-    if(cards!=null){
-        if(cards=''){
-            cards = 32;
-        }
+function buildDates(){
+    let dateCards, dateTime;
+
+    dateCards = localStorage.getItem('images');
+    if((dateCards!=null)&&(dateCards!='')){
+        num = parseInt(dateCards);
+    }else{
+        num = 32;
     }
-    return cards;
+
+    dateTime = localStorage.getItem('time');
+    if((dateTime!=null)&&(dateTime!=0)){
+        time = parseInt(dateTime);
+        clock();
+    }else{
+        $('#clock').val(0);
+    }
 }
 
 function isDiferent(){
@@ -101,28 +133,69 @@ function resetCards(){
 }
 
 function initBoard(){
-    let k = 0;
-    if(num === 20){
-        for(i=0;i<5;i++){
-            if(i%2==0){
-                k = 1;
-            }else{
-                k=2;
-            }
-            $('#row1').append("<img id='row0_"+i+"' src='../img/reverso.jpg'>");
-            $('#row2').append("<img id='row1_"+i+"' src='../img/reverso.jpg'>");
-            $('#row3').append("<img id='row2_"+i+"' src='../img/reverso.jpg'>");
-            $('#row4').append("<img id='row3_"+i+"' src='../img/reverso.jpg'>");
-            cards[i] = new Card("row0_"+i,k);
-            cards[i+5] = new Card("row1_"+i,k);
-            cards[i+10] = new Card("row2_"+i,k);
-            cards[i+15] = new Card("row3_"+i,k);
-        }
-    }else if(num === 26){
-    
-    }else if(num === 32){
+    let typeCards, limit;
 
+    if(num === 20){
+        limit = 5;
+    }else{
+        limit = 8;
+    } 
+
+    typeCards = getTypeCards(num);
+
+    for(i=0;i<4;i++){
+        lim = getLimit(num, limit, i);
+        for(j=0;j<lim;j++){
+            $('#row'+i).append("<img id='row"+i+"_"+j+"' src='../img/reverso.jpg'>");
+            cards[j+(limit*i)] = new Card("row"+i+"_"+j,typeCards[j+(limit*i)]);
+        }
     }
+}
+
+function getLimit(num, limit, i){
+    l = limit
+    if(l == 5){
+        $('#row'+i).css('width','75%');
+    }else{
+        if((num==26)&&(i==3)){
+            l = 2;
+            $('#row'+i).css('width','21%');
+        }else{
+            $('#row'+i).css('width','90%');
+        }
+    }
+    return l;
+}
+
+function getTypeCards(num){
+    let typeCards = new Array(num);
+    let types = [1,2];
+    let ind = 0;
+    let cont = 1;
+    let asignados = 0;
+    
+    do{
+        let i = random(0,(num-1));
+        if(typeCards[i] == undefined){
+            if(types[ind] == 1){
+                typeCards[i] = '../img/copas12.jpg';
+            }else{
+                typeCards[i] = '../img/bastos1.jpg';
+            }
+            if(cont == 2){
+                cont = 1;
+                ind = (ind + 1) % 2; 
+            }else{
+                cont++;
+            }
+            asignados++;
+        }
+    }while(asignados<num);
+    return typeCards;
+}
+
+function random(min, max) {
+    return Math.floor((Math.random() * (max - min + 1)) + min);
 }
 
 class Board{
@@ -147,32 +220,38 @@ class Board{
 }
 
 class Card{
-    constructor(id, state){
+    
+    constructor(id,state){
         this.id = id;
         this.state = state;
         this.type = 0;
     }
 
-    getId(){
-        return this.id;
-    }
-
     setId(id){
         this.id = id;
     }
+
     setState(state){
         this.state = state;
     }
+
     setType(type){
         this.type = type;
     }
-    change(){
-        this.type = (this.type+1)%2;
+
+    getId(){
+        return this.id;
     }
+    
     getType(){
         return this.type;
     }
+
     getState(){
         return this.state;
+    }
+
+    change(){
+        this.type = (this.type+1)%2;
     }
 }
