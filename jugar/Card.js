@@ -1,4 +1,4 @@
-export default class Card{
+class Card{
     
     constructor(id,state){
         this.id = id;
