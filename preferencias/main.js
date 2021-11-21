@@ -3,8 +3,9 @@ $(function (){
 });
 
 function action(){
-    let images = $("select#images").val();
-    let time = $("select#time").val();
+    let images, time;
+    images = $("select#images").val();
+    time = $("select#time").val();
     localStorage.setItem('images',images);
     localStorage.setItem('time',time);
     loadGame();
