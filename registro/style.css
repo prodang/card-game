@@ -1,6 +1,19 @@
 nav{
-    padding: 0rem 1.5rem;
+    padding: 0 20px !important;
     background: orange;
+}
+
+a{
+    padding: 15px 10px !important;
+}
+
+.present{
+    background: rgb(236, 231, 169);
+    color: black !important;
+}
+
+li a:hover{
+    background: rgb(236, 231, 169, .5);;
 }
 
 main{
